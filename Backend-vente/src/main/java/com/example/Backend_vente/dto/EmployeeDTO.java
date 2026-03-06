@@ -1,5 +1,4 @@
-// src/main/java/com/example/employee/dto/EmployeeDTO.java
-package com.example.employee.dto;
+package com.example.Backend_vente.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +22,7 @@ public class EmployeeDTO {
     
     private String determineObservation(Double salaire) {
         if (salaire < 1000) return "médiocre";
-        else if (salaire >= 1000 && salaire <= 5000) return "moyen";
+        else if (salaire <= 5000) return "moyen";
         else return "grand";
     }
 }

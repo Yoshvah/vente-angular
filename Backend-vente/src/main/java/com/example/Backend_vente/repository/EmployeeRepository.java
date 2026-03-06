@@ -1,7 +1,6 @@
-// src/main/java/com/example/employee/repository/EmployeeRepository.java
-package com.example.employee.repository;
+package com.example.Backend_vente.repository;
 
-import com.example.employee.model.Employee;
+import com.example.Backend_vente.model.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

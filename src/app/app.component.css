@@ -1,0 +1,42 @@
+/* src/app/app.component.css */
+.mat-mdc-table {
+  width: 100%;
+  background: white;
+}
+
+.mat-mdc-header-cell {
+  font-weight: 600;
+  color: #4a5568;
+  background-color: #f9fafb;
+}
+
+.mat-mdc-cell {
+  color: #1f2937;
+}
+
+.mat-mdc-row:hover {
+  background-color: #f9fafb;
+}
+
+.mat-mdc-paginator {
+  background: transparent;
+}
+
+/* Custom scrollbar for table */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}

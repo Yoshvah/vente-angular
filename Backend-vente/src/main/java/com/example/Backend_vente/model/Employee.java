@@ -1,5 +1,4 @@
-// src/main/java/com/example/employee/model/Employee.java
-package com.example.employee.model;
+package com.example.Backend_vente.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
