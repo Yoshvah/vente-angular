@@ -1,4 +1,4 @@
-package com.example.Backend_Employee.model;
+package com.example.Backend_Vente.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,19 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "employees")
+@Table(name = "Produits")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee {
+public class Produit {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long numEmp;
+    private Long numProduit;
     
     @Column(nullable = false)
-    private String nom;
-    
-    @Column(nullable = false)
-    private Double salaire;
+    private String Design;
+
+    @Column()
+    private Double Stock;
 }

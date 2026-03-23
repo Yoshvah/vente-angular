@@ -1,4 +1,4 @@
-package com.example.Backend_vente.dto;
+package com.example.Backend_Employee.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

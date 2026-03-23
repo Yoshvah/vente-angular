@@ -41,7 +41,7 @@ Chart.register(...registerables);
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  title = 'vente-angular';
+  title = 'Employee-angular';
   displayedColumns: string[] = ['nom', 'salaire', 'obs', 'actions'];
   dataSource = new MatTableDataSource<Employee>();
   salaryStats: SalaryStats = { total: 0, min: 0, max: 0 };

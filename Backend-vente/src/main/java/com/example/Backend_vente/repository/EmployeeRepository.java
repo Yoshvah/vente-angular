@@ -1,6 +1,6 @@
-package com.example.Backend_vente.repository;
+package com.example.Backend_Employee.repository;
 
-import com.example.Backend_vente.model.Employee;
+import com.example.Backend_Employee.model.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

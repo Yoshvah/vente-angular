@@ -1,8 +1,8 @@
-package com.example.Backend_vente.controller;
+package com.example.Backend_Employee.controller;
 
-import com.example.Backend_vente.model.Employee;
-import com.example.Backend_vente.repository.EmployeeRepository;
-import com.example.Backend_vente.dto.EmployeeDTO;
+import com.example.Backend_Employee.model.Employee;
+import com.example.Backend_Employee.repository.EmployeeRepository;
+import com.example.Backend_Employee.dto.EmployeeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
