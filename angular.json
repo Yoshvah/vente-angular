@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "vente-angular": {
+    "Employee-angular": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -54,10 +54,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "vente-angular:build:production"
+              "buildTarget": "Employee-angular:build:production"
             },
             "development": {
-              "buildTarget": "vente-angular:build:development"
+              "buildTarget": "Employee-angular:build:development"
             }
           },
           "defaultConfiguration": "development"
