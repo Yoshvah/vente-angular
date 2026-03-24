@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SaleService } from '../../services/sale.service';
+import { SaleService } from '../../service/sale.service';
 import { Product } from '../../models/product.model';
 import { Client } from '../../models/client.model';
 import { Sale } from '../../models/sale.model';
