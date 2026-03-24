@@ -1,18 +1,10 @@
-// src/main/java/com/example/backend/entity/Sale.java
 package com.example.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "vente")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Sale {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,4 +19,18 @@ public class Sale {
     
     @Column(name = "qtesortie", nullable = false)
     private Integer quantity;
+    
+    public Sale() {}
+    
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public Client getClient() { return client; }
+    public void setClient(Client client) { this.client = client; }
+    
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
+    
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 }

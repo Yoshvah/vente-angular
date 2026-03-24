@@ -1,4 +1,3 @@
-// src/main/java/com/example/backend/controller/SaleController.java
 package com.example.backend.controller;
 
 import com.example.backend.dto.AuditStats;

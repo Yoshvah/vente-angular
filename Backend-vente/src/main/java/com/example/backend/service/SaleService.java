@@ -1,4 +1,3 @@
-// src/main/java/com/example/backend/service/SaleService.java
 package com.example.backend.service;
 
 import com.example.backend.dto.AuditStats;
@@ -6,7 +5,6 @@ import com.example.backend.dto.SaleRequest;
 import com.example.backend.entity.*;
 import com.example.backend.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +14,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class SaleService {
     
     private final SaleRepository saleRepository;
     private final ProductRepository productRepository;
     private final ClientRepository clientRepository;
     private final AuditSaleRepository auditSaleRepository;
+    
+    public SaleService(SaleRepository saleRepository, ProductRepository productRepository, 
+                       ClientRepository clientRepository, AuditSaleRepository auditSaleRepository) {
+        this.saleRepository = saleRepository;
+        this.productRepository = productRepository;
+        this.clientRepository = clientRepository;
+        this.auditSaleRepository = auditSaleRepository;
+    }
     
     @Transactional
     public Sale createSale(SaleRequest request, String username, HttpServletRequest httpRequest) {
@@ -31,6 +36,10 @@ public class SaleService {
         Product product = productRepository.findById(request.getProductId())
             .orElseThrow(() -> new RuntimeException("Product not found"));
         
+        if (product.getStock() < request.getQuantity()) {
+            throw new RuntimeException("Insufficient stock");
+        }
+        
         Sale sale = new Sale();
         sale.setClient(client);
         sale.setProduct(product);
@@ -38,11 +47,9 @@ public class SaleService {
         
         Sale savedSale = saleRepository.save(sale);
         
-        // Update stock
         product.setStock(product.getStock() - request.getQuantity());
         productRepository.save(product);
         
-        // Create audit entry
         createAuditEntry("INSERT", client.getName(), product.getDesignation(), 
             null, request.getQuantity(), username, httpRequest);
         
@@ -57,16 +64,16 @@ public class SaleService {
         Integer oldQuantity = existingSale.getQuantity();
         Product product = existingSale.getProduct();
         
-        // Update stock: New stock = Old stock + oldQuantity - newQuantity
         int stockUpdate = oldQuantity - request.getQuantity();
+        if (product.getStock() + stockUpdate < 0) {
+            throw new RuntimeException("Insufficient stock for update");
+        }
         product.setStock(product.getStock() + stockUpdate);
         productRepository.save(product);
         
-        // Update sale
         existingSale.setQuantity(request.getQuantity());
         Sale updatedSale = saleRepository.save(existingSale);
         
-        // Create audit entry
         createAuditEntry("UPDATE", existingSale.getClient().getName(), 
             product.getDesignation(), oldQuantity, request.getQuantity(), 
             username, httpRequest);
@@ -84,11 +91,9 @@ public class SaleService {
         String clientName = sale.getClient().getName();
         String productDesignation = product.getDesignation();
         
-        // Restore stock
         product.setStock(product.getStock() + oldQuantity);
         productRepository.save(product);
         
-        // Create audit entry before deletion
         createAuditEntry("DELETE", clientName, productDesignation, 
             oldQuantity, null, username, httpRequest);
         
@@ -108,7 +113,6 @@ public class SaleService {
         audit.setNewQuantity(newQuantity);
         audit.setUsername(username);
         
-        // Get host machine name
         try {
             String hostName = InetAddress.getLocalHost().getHostName();
             audit.setHostMachine(hostName);

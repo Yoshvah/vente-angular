@@ -1,4 +1,3 @@
-// src/main/java/com/example/backend/repository/AuditSaleRepository.java
 package com.example.backend.repository;
 
 import com.example.backend.entity.AuditSale;
