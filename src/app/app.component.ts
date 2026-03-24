@@ -1,7 +1,5 @@
-// src/app/app.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
 import { SaleManagementComponent } from './components/sale-management/sale-management.component';
 import { AuditComponent } from './components/audit/audit.component';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -9,7 +7,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, SaleManagementComponent, AuditComponent, MatTabsModule],
+  imports: [CommonModule, SaleManagementComponent, AuditComponent, MatTabsModule],
   template: `
     <div class="container mx-auto p-6">
       <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">
