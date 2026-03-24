@@ -3,11 +3,12 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Vente-angular": {
+    "vente-angular": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:application": {
-          "strict": true
+        "@schematics/angular:component": {
+          "standalone": true,
+          "style": "css"
         }
       },
       "root": "",
@@ -15,71 +16,70 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/Vente-angular",
+            "outputPath": {
+              "base": "dist/vente-angular"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "browser": "src/main.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "src/styles.scss"
+              "src/styles.css",
+              "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
             ],
             "scripts": []
           },
           "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kB",
+                  "maximumError": "4kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
             "development": {
               "optimization": false,
-              "extractLicenses": false,
               "sourceMap": true,
+              "extractLicenses": false,
               "namedChunks": true
-            },
-            "production": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "Vente-angular:build"
+            "buildTarget": "vente-angular:build:development"
           },
           "configurations": {
-            "development": {
-              "browserTarget": "Vente-angular:build:development"
-            },
             "production": {
-              "browserTarget": "Vente-angular:build:production"
+              "buildTarget": "vente-angular:build:production"
             }
           }
         },
         "extract-i18n": {
-          "builder": "@angular/localize:extract-i18n",
-          "options": {
-            "browserTarget": "Vente-angular:build"
-          }
+          "builder": "@angular-devkit/build-angular:extract-i18n"
         },
         "test": {
-          "builder": "@angular/build:test",
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "src/styles.scss"
+              "src/styles.css",
+              "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
             ],
             "scripts": []
           }

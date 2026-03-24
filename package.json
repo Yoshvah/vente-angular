@@ -1,5 +1,5 @@
 {
-  "name": "employee-angular",
+  "name": "Vente-angular",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -26,6 +26,7 @@
     "tslib": "^2.6.2"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "^21.2.3",
     "@angular/build": "^21.2.1",
     "@angular/cli": "^21.2.1",
     "@angular/compiler-cli": "^21.2.0",
