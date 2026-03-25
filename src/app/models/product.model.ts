@@ -3,3 +3,8 @@ export interface Product {
     designation: string;
     stock: number;
 }
+
+export interface ProductRequest {
+    designation: string;
+    stock: number;
+}

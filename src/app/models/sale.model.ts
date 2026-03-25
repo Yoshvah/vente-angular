@@ -7,3 +7,9 @@ export interface Sale {
     product: Product;
     quantity: number;
 }
+
+export interface SaleRequest {
+    clientId: number;
+    productId: number;
+    quantity: number;
+}

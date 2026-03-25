@@ -2,18 +2,12 @@ package com.example.backend.repository;
 
 import com.example.backend.entity.AuditSale;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface AuditSaleRepository extends JpaRepository<AuditSale, Long> {
-    
-    @Query("SELECT COUNT(a) FROM AuditSale a WHERE a.operationType = 'INSERT'")
-    Long countInsertOperations();
-    
-    @Query("SELECT COUNT(a) FROM AuditSale a WHERE a.operationType = 'UPDATE'")
-    Long countUpdateOperations();
-    
-    @Query("SELECT COUNT(a) FROM AuditSale a WHERE a.operationType = 'DELETE'")
-    Long countDeleteOperations();
+    List<AuditSale> findAllByOrderByUpdateDateDesc();
+    Long countByOperationType(String operationType);
 }
