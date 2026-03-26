@@ -1,5 +1,5 @@
 // src/app/components/sale-management/sale-management.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SaleService } from '../../service/sale.service';
@@ -12,6 +12,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-sale-management',
@@ -34,7 +36,7 @@ import { MatIconModule } from '@angular/material/icon';
           <h2 class="text-xl font-semibold mb-4 text-gray-800">
             {{ editingSale ? 'Modifier la vente' : 'Nouvelle vente' }}
           </h2>
-          
+
           <form (ngSubmit)="onSubmit()" class="space-y-4">
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Client</mat-label>
@@ -73,7 +75,7 @@ import { MatIconModule } from '@angular/material/icon';
         <!-- Tableau des ventes -->
         <div class="bg-white p-6 rounded-lg shadow-md">
           <h2 class="text-xl font-semibold mb-4 text-gray-800">Liste des ventes</h2>
-          
+
           <div class="overflow-x-auto">
             <table mat-table [dataSource]="sales" class="w-full">
               <ng-container matColumnDef="client">
@@ -113,28 +115,48 @@ import { MatIconModule } from '@angular/material/icon';
   `,
   styles: []
 })
-export class SaleManagementComponent implements OnInit {
+export class SaleManagementComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   clients: Client[] = [];
   sales: Sale[] = [];
-  
+
   selectedClientId: number | null = null;
   selectedProductId: number | null = null;
   quantity: number = 1;
   editingSale: Sale | null = null;
-  
-  displayedColumns: string[] = ['client', 'product', 'quantity', 'actions'];
 
-  constructor(private saleService: SaleService) {}
+  displayedColumns: string[] = ['client', 'product', 'quantity', 'actions'];
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(
+    private saleService: SaleService,
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
   }
 
   loadData(): void {
-    this.saleService.getProducts().subscribe(data => this.products = data);
-    this.saleService.getClients().subscribe(data => this.clients = data);
-    this.saleService.getSales().subscribe(data => this.sales = data);
+    this.subscriptions.add(
+      this.saleService.getProducts().subscribe(data => {
+        this.products = data;
+        this.cdr.detectChanges();
+      })
+    );
+    this.subscriptions.add(
+      this.saleService.getClients().subscribe(data => {
+        this.clients = data;
+        this.cdr.detectChanges();
+      })
+    );
+    this.subscriptions.add(
+      this.saleService.getSales().subscribe(data => {
+        this.sales = data;
+        this.cdr.detectChanges();
+      })
+    );
   }
 
   onSubmit(): void {
@@ -149,15 +171,19 @@ export class SaleManagementComponent implements OnInit {
     const username = prompt('Entrez votre nom d\'utilisateur:', 'admin') || 'admin';
 
     if (this.editingSale) {
-      this.saleService.updateSale(this.editingSale.id, saleData, username).subscribe(() => {
-        this.loadData();
-        this.resetForm();
-      });
+      this.subscriptions.add(
+        this.saleService.updateSale(this.editingSale.id, saleData, username).subscribe(() => {
+          this.loadData();
+          this.resetForm();
+        })
+      );
     } else {
-      this.saleService.createSale(saleData, username).subscribe(() => {
-        this.loadData();
-        this.resetForm();
-      });
+      this.subscriptions.add(
+        this.saleService.createSale(saleData, username).subscribe(() => {
+          this.loadData();
+          this.resetForm();
+        })
+      );
     }
   }
 
@@ -171,9 +197,11 @@ export class SaleManagementComponent implements OnInit {
   deleteSale(id: number): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette vente ?')) {
       const username = prompt('Entrez votre nom d\'utilisateur:', 'admin') || 'admin';
-      this.saleService.deleteSale(id, username).subscribe(() => {
-        this.loadData();
-      });
+      this.subscriptions.add(
+        this.saleService.deleteSale(id, username).subscribe(() => {
+          this.loadData();
+        })
+      );
     }
   }
 
@@ -182,5 +210,9 @@ export class SaleManagementComponent implements OnInit {
     this.selectedClientId = null;
     this.selectedProductId = null;
     this.quantity = 1;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }
