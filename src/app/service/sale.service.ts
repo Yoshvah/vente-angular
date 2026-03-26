@@ -5,6 +5,7 @@ import { Product, ProductRequest } from '../models/product.model';
 import { Client, ClientRequest } from '../models/client.model';
 import { Sale, SaleRequest } from '../models/sale.model';
 import { Audit, AuditStats } from '../models/audit.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,18 @@ import { Audit, AuditStats } from '../models/audit.model';
 export class SaleService {
   private apiUrl = 'http://localhost:8080/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
+
 
   // Product CRUD
   getProducts(): Observable<Product[]> {
@@ -58,22 +70,22 @@ export class SaleService {
 
   // Sale CRUD with audit
   getSales(): Observable<Sale[]> {
-    return this.http.get<Sale[]>(`${this.apiUrl}/sales`);
+    return this.http.get<Sale[]>(`${this.apiUrl}/sales`, { headers: this.getAuthHeaders() });
   }
 
   createSale(sale: SaleRequest, username: string): Observable<Sale> {
     const headers = new HttpHeaders().set('X-Username', username);
-    return this.http.post<Sale>(`${this.apiUrl}/sales`, sale, { headers });
+    return this.http.post<Sale>(`${this.apiUrl}/sales`, sale, { headers: this.getAuthHeaders() });
   }
 
   updateSale(id: number, sale: SaleRequest, username: string): Observable<Sale> {
     const headers = new HttpHeaders().set('X-Username', username);
-    return this.http.put<Sale>(`${this.apiUrl}/sales/${id}`, sale, { headers });
+    return this.http.put<Sale>(`${this.apiUrl}/sales/${id}`, sale, { headers: this.getAuthHeaders() });
   }
 
   deleteSale(id: number, username: string): Observable<void> {
     const headers = new HttpHeaders().set('X-Username', username);
-    return this.http.delete<void>(`${this.apiUrl}/sales/${id}`, { headers });
+    return this.http.delete<void>(`${this.apiUrl}/sales/${id}`, { headers: this.getAuthHeaders() });
   }
 
   // Audit
